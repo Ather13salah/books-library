@@ -11,7 +11,7 @@ export  async function login(previous, formData){
     if (password.length < 8){
         return{error:'Password at least has 8 characters'}
     }
-    const request = await fetch('http://localhost:8000/login',{
+    const request = await fetch('http://localhost:8000/auth/login',{
         method:"POST",
         headers:{
             'Content-Type':'application/json'
@@ -34,6 +34,21 @@ export  async function login(previous, formData){
         path:"/",
         maxAge:60 * 60
     })
+
+     Cookies.set('refresh_token',response.refresh_token,{
+        httpOnly:true,
+        secure:true,
+        path:"/",
+        maxAge:30 * 24 * 60 * 60
+    })
+
+    Cookies.set('id',response.id,{
+        httpOnly:false,
+        secure:true,
+        path:"/",
+        maxAge:30 * 24 * 60 * 60
+    })
+
 
     redirect('/')
 

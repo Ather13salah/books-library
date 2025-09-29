@@ -11,7 +11,7 @@ export default function Home() {
       <div className=" flex  flex-col justify-center items-center w-screen min-h-screen bg-[url('/assets/background.jpg')] bg-center bg-cover ">
         <FontAwesomeIcon
           icon={faBars}
-          className="duration-300 absolute font-bold top-3 left-4 cursor-pointer"
+          className="duration-300 absolute text-amber-50 font-bold top-3 left-4 cursor-pointer"
           onClick={() => setIsOpen(true)}
         ></FontAwesomeIcon>
         <div className="text-amber-50 text-5xl font-bold animate-none">

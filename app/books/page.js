@@ -1,11 +1,105 @@
-import React from 'react'
+"use client";
+import { useEffect, useState } from "react";
+import { BooksManager } from "../components/booksManager";
+import BooksDisplay from "../components/BooksDisplay";
+import AddBook from "../components/AddBook";
+import AddBookImg from "../components/AddBookImg";
+import BackArrow from "../components/BackArrow";
+import { toast } from "sonner";
 
 function Books() {
+  const [Books, setBooks] = useState([]);
+  const [error, setError] = useState(null);
+  const [isOpen, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const booksManager = new BooksManager();
+
+  useEffect(() => {
+    setLoading(true);
+    const getBooks = async () => {
+      const user_id = document.cookie.split(";")[0].split("=")[1];
+      const getBooks = await booksManager.getBooks(user_id);
+      if (getBooks.error) {
+        setLoading(false);
+        return;
+      }
+      setBooks(getBooks.books);
+      setLoading(false);
+    };
+
+    getBooks();
+  }, []);
+
+  const handleChange = async (e) => {
+    setLoading(true);
+    if (e.target.files.length > 0) {
+      const file = e.target.files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const newBook = await booksManager.addBook(formData);
+
+      if (newBook.error) {
+        setError(newBook.error);
+        setLoading(false);
+        return;
+      }
+
+      if (newBook.warning) {
+        setOpen(true);
+        setLoading(false);
+        return;
+      }
+
+      setBooks([...Books, newBook]);
+      setLoading(false);
+    }
+  };
+
   return (
-    <div>
-      
+    <div className="bg-white flex justify-center items-center w-screen min-h-screen">
+      <BackArrow goTo="/"/>
+      {/* this section for adding errors or messages for user */}
+      {error && toast(error)}
+      {loading ? (
+        <div className="w-screen h-screen flex justify-center items-center ">
+          <div className="w-12 h-12 border-3  border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      ) : Books && Books.length > 0 ? (
+        <div className="flex flex-col w-full h-screen p-6">
+          <div className="w-full h-16 flex justify-center items-start"> 
+            <h1 className="font-bold text-center text-2xl "> All Books: {Books.length}</h1>
+          </div>
+
+          <AddBookImg
+            label={"+"}
+            style={
+              "flex justify-center cursor-pointer w-12 h-12 fixed top-1 right-1 bg-purple-600 rounded-full font-bold text-3xl text-white"
+            }
+            handleChange={handleChange}
+          />
+          <button className="bg-red-500 w-24 h-8" onClick={()=>setOpen(true)}>Add Manually</button>
+          <BooksDisplay Books={Books} setBooks={setBooks} />
+        </div>
+      ) : (
+        // this for display book card of all info
+        <div className="w-full flex justify-center items-center flex-col">
+          <div className="text-black text-3xl">
+            <h1>No Books Found</h1>
+          </div>
+          <AddBookImg
+            label={"Add Book"}
+            style={
+              "cursor-pointer  bg-purple-600 text-center mt-3.5 text-amber-50 w-24  rounded-lg "
+            }
+            handleChange={handleChange}
+          />
+        
+        </div>
+      )}
+      {isOpen && <AddBook isOpen={isOpen} setIsOpen={setOpen} />}
     </div>
-  )
+  );
 }
 
-export default Books
+export default Books;
