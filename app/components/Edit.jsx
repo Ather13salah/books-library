@@ -50,7 +50,7 @@ function Edit({ isOpen, setBook, book, setIsOpen }) {
       book.id
     );
     if (newBook.error) {
-      setError(error);
+      setError(newBook.error);
       setLoading(false);
       return;
     }
@@ -61,6 +61,7 @@ function Edit({ isOpen, setBook, book, setIsOpen }) {
       writer: writer,
       publisher: publisher,
       category: category,
+      total_pages: total_pages
     });
     setLoading(false)
     setIsOpen(false)

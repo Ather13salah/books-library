@@ -161,10 +161,11 @@ function BookInfo({ isOpen, setIsOpen, id }) {
             </div>
           </div>
         </div>
-      </AlertDialogContent>
-      {isOpenToEdit && (
+           {isOpenToEdit && (
         <Edit book={book} setBook={setBook} isOpen={isOpenToEdit} setIsOpen={setIsOpenToEdit} />
       )}
+      </AlertDialogContent>
+   
     </AlertDialog>
   );
 }

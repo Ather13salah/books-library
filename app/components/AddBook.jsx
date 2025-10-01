@@ -8,13 +8,14 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { BooksManager } from "./booksManager";
-function AddBook({ isOpen, setIsOpen }) {
+function AddBook({ isOpen, setIsOpen, books, setBooks }) {
   const [bookName, setBookName] = useState("");
   const [writer, setWriter] = useState("");
   const [publisher, setPublisher] = useState("");
   const [category, setCategory] = useState("");
   const [total_pages, setTotalPages] = useState("");
   const [preview, setPreview] = useState("");
+  const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -27,6 +28,13 @@ function AddBook({ isOpen, setIsOpen }) {
 
   const booksManager = new BooksManager();
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file)); // يعرض الصورة
+    }
+  };
   const validateData = () => {
     if (
       bookName === "" ||
@@ -39,14 +47,21 @@ function AddBook({ isOpen, setIsOpen }) {
       setLoading(false);
       return false;
     }
+    if (isNaN(total_pages)){
+      setError("Total pages must be number");
+      setLoading(false);
+      return false;
+    }
+    if (!image){
+      setError("Image must be upload it");
+      setLoading(false);
+      return false;
+    }
   };
 
-  const handleSave = async (e) => {
-    const image = e.target.files[0];
-    if (!validateData()) return;
-    else {
-      setPreview(URL.createObjectURL(image));
-    }
+  const handleSave = async () => {
+    const validation = validateData()
+    if (validation === false) return;
     setLoading(true);
     const formData = new FormData();
     formData.append("book_name", bookName);
@@ -57,15 +72,16 @@ function AddBook({ isOpen, setIsOpen }) {
     if (image) formData.append("file", image);
     const newBook = await booksManager.addBookManually(formData);
     if (newBook.error) {
-      setError(error);
+      setError(newBook.error);
       setLoading(false);
       return;
     }
+    setBooks([...books,newBook])
 
     setLoading(false);
     setIsOpen(false);
   };
-  console.log(preview)
+
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
@@ -127,18 +143,23 @@ function AddBook({ isOpen, setIsOpen }) {
             <input
               dir="rtl"
               type="text"
-              name="book_category"
+              name="total_pages"
               value={total_pages}
               onChange={(e) => setTotalPages(e.target.value)}
               className={inputStyle}
             />
+
             {preview ? (
               <div>
-                <img className="w-12 h-12 bg-white" src={preview}></img>
+                <img
+                  className="w-24 h-24 mt-4 bg-white"
+                  src={preview}
+                  alt="Book preview"
+                ></img>
               </div>
             ) : (
-              <div>
-                <label htmlFor="book_image" className={labelStyle}>
+              <div  className={`${error && 'bg-red-500 text-white underline'}`}>
+                <label htmlFor="book_image" style={{"cursor":"Pointer"}} className={`${labelStyle} ${error && 'text-white'}`}>
                   {" "}
                   ارفق صورة الكتاب
                 </label>
@@ -147,6 +168,8 @@ function AddBook({ isOpen, setIsOpen }) {
                   type="file"
                   name="book_image"
                   className="hidden"
+                  onChange={handleImageChange}
+                  
                 />
               </div>
             )}

@@ -78,7 +78,6 @@ function Books() {
             }
             handleChange={handleChange}
           />
-          <button className="bg-red-500 w-24 h-8" onClick={()=>setOpen(true)}>Add Manually</button>
           <BooksDisplay Books={Books} setBooks={setBooks} />
         </div>
       ) : (
@@ -97,7 +96,7 @@ function Books() {
         
         </div>
       )}
-      {isOpen && <AddBook isOpen={isOpen} setIsOpen={setOpen} />}
+      {isOpen && <AddBook books={Books} setBooks={setBooks} isOpen={isOpen} setIsOpen={setOpen} />}
     </div>
   );
 }
