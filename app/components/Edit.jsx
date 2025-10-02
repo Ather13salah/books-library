@@ -7,9 +7,16 @@ import {
 } from "@/components/ui/alert-dialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
-import { BooksManager } from "./booksManager";
-function Edit({ isOpen, setBook, book, setIsOpen }) {
-  const user_id = document.cookie.split(";")[0].split("=")[1];
+import { BooksManager, getUserID } from "./booksManager";
+function Edit({
+  isOpenToEdit,
+  books,
+  setBooks,
+  setBook,
+  book,
+  setIsOpenToEdit,
+}) {
+  const user_id = getUserID()
   const [bookName, setBookName] = useState(book?.book_name);
   const [writer, setWriter] = useState(book?.writer);
   const [publisher, setPublisher] = useState(book?.publisher);
@@ -17,7 +24,7 @@ function Edit({ isOpen, setBook, book, setIsOpen }) {
   const [total_pages, setTotalPages] = useState(book?.total_pages);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+  let id = book.id;
   const labelStyle = `text-lg ${
     error ? "text-red-500" : "text-black"
   } font-semibold`;
@@ -47,33 +54,45 @@ function Edit({ isOpen, setBook, book, setIsOpen }) {
       category,
       total_pages,
       user_id,
-      book.id
+      id
     );
     if (newBook.error) {
       setError(newBook.error);
       setLoading(false);
       return;
     }
-    
-    setBook({
-      ...book,
+    const newBookInfo = {
       book_name: bookName,
       writer: writer,
       publisher: publisher,
       category: category,
-      total_pages: total_pages
+      total_pages: total_pages,
+    };
+    setBook({
+      ...book,
+      ...newBookInfo,
     });
-    setLoading(false)
-    setIsOpen(false)
+    books.map((book, index) => {
+      if (book.id === id) {
+        let copyBooks = [...books];
+        copyBooks[index] = {
+          ...copyBooks[index],
+          ...newBookInfo,
+        };
+        setBooks(copyBooks);
+      }
+    });
+    setLoading(false);
+    setIsOpenToEdit(false);
   };
   return (
-    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+    <AlertDialog open={isOpenToEdit} onOpenChange={setIsOpenToEdit}>
       <AlertDialogContent>
         <AlertDialogTitle>Edit Book..</AlertDialogTitle>
         <div dir="rtl" className="w-full h-full flex flex-col">
           <FontAwesomeIcon
             icon={faX}
-            onClick={() => setIsOpen(false)}
+            onClick={() => setIsOpenToEdit(false)}
             className="fixed top-4 right-4 cursor-pointer"
           ></FontAwesomeIcon>
 
@@ -127,7 +146,7 @@ function Edit({ isOpen, setBook, book, setIsOpen }) {
             <input
               dir="rtl"
               type="text"
-              name="book_category"
+              name="total_pages"
               value={total_pages}
               onChange={(e) => setTotalPages(e.target.value)}
               className={inputStyle}
@@ -143,7 +162,7 @@ function Edit({ isOpen, setBook, book, setIsOpen }) {
           </button>
           <button
             className="w-24 h-8 bg-gray-100 rounded-lg text-center cursor-pointer text-black"
-            onClick={() => setIsOpen(false)}
+            onClick={() => setIsOpenToEdit(false)}
           >
             Cancel
           </button>

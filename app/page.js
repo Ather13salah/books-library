@@ -7,8 +7,9 @@ import SideBar from "./components/sideBar";
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div>
-      <div className=" flex  flex-col justify-center items-center w-screen min-h-screen bg-[url('/assets/background.jpg')] bg-center bg-cover ">
+    <div className="w-screen h-screen flex flex-col justify-center items-center bg-black bg-[url('/assets/background.jpg')] bg-center bg-cover">
+
+      <div className="   ">
         <FontAwesomeIcon
           icon={faBars}
           className="duration-300 absolute text-amber-50 font-bold top-3 left-4 cursor-pointer"

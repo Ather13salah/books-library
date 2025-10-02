@@ -4,18 +4,17 @@ import { BooksManager } from "../components/booksManager";
 import BackArrow from "../components/BackArrow";
 import FavoriteOrDailyDisplay from "../components/FavoriteOrDailyDisplay";
 import { toast } from "sonner";
+import { getUserID } from "../components/booksManager";
 function Books() {
   const [favouriteBooks, setFavouriteBooks] = useState([]);
-  const [userId,setUserId] = useState("")
+  const [userId, setUserId] = useState("");
   const [loading, setLoading] = useState(false);
   const booksManager = new BooksManager();
-
   useEffect(() => {
-    const user_id = document.cookie.split(";")[0].split("=")[1];
-    setUserId(user_id);
+    setUserId(getUserID());
   }, []);
   useEffect(() => {
-    if(!userId) return
+    if (!userId) return;
     setLoading(true);
     const getBooks = async () => {
       const getBooks = await booksManager.getFavoriteBooks(userId);
@@ -31,8 +30,6 @@ function Books() {
   }, [userId]);
 
   const handleDelete = async (id) => {
-
-
     const deleteFromFavourite = await booksManager.deleteFromFavourite(
       userId,
       id
@@ -64,6 +61,7 @@ function Books() {
           <FavoriteOrDailyDisplay
             Books={favouriteBooks}
             handleDelete={handleDelete}
+            setBooks={setFavouriteBooks}
           />
         </div>
       ) : (

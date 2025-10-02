@@ -3,15 +3,15 @@ import { useEffect, useState } from "react";
 import { BooksManager } from "../components/booksManager";
 import BackArrow from "../components/BackArrow";
 import FavoriteOrDailyDisplay from "../components/FavoriteOrDailyDisplay";
+import { getUserID } from "../components/booksManager";
 function Books() {
   const [dailyBooks, setDailyBooks] = useState([]);
-  const [userId,setUserId] = useState("")
+  const [userId ,setUserId] = useState("")
   const [loading, setLoading] = useState(false);
   const booksManager = new BooksManager();
- useEffect(()=>{
-   const user_id = document.cookie.split(";")[0].split("=")[1];
-   setUserId(user_id)
- },[])
+  useEffect(()=>{
+    setUserId(getUserID())
+  },[])
   useEffect(() => {
     if(!userId) return
     setLoading(true);
@@ -59,6 +59,7 @@ function Books() {
           <FavoriteOrDailyDisplay
             Books={dailyBooks}
             handleDelete={handleDelete}
+            setBooks={setDailyBooks}
           />
         </div>
       ) : (

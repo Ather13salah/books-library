@@ -45,7 +45,7 @@ export  async function signup(previous, formData){
     })
 
 
-    Cookies.set('id',response.id,{
+    Cookies.set('user_id',response.id,{
         httpOnly:false,
         secure:true,
         path:"/",

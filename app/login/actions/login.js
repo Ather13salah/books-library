@@ -42,7 +42,7 @@ export  async function login(previous, formData){
         maxAge:30 * 24 * 60 * 60
     })
 
-    Cookies.set('id',response.id,{
+    Cookies.set('user_id',response.id,{
         httpOnly:false,
         secure:true,
         path:"/",

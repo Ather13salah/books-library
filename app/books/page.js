@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { BooksManager } from "../components/booksManager";
+import { BooksManager, getUserID } from "../components/booksManager";
 import BooksDisplay from "../components/BooksDisplay";
 import AddBook from "../components/AddBook";
 import AddBookImg from "../components/AddBookImg";
@@ -17,7 +17,8 @@ function Books() {
   useEffect(() => {
     setLoading(true);
     const getBooks = async () => {
-      const user_id = document.cookie.split(";")[0].split("=")[1];
+      const user_id = getUserID()
+
       const getBooks = await booksManager.getBooks(user_id);
       if (getBooks.error) {
         setLoading(false);

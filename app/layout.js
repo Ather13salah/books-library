@@ -23,8 +23,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-    
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="manifest" href="/manifest.json" />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} `}>
         {children}
         <Toaster richColors position="top-right" />
       </body>

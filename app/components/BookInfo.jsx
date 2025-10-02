@@ -5,7 +5,7 @@ import {
   AlertDialogContent,
 } from "@/components/ui/alert-dialog";
 import Edit from "./Edit";
-import { BooksManager } from "./booksManager";
+import { BooksManager, getUserID } from "./booksManager";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,14 +15,19 @@ import {
   faStar,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
-function BookInfo({ isOpen, setIsOpen, id }) {
+function BookInfo({
+  isOpen,
+  books,
+  setBooks,
+  setIsOpen,
+  id,
+  isInBooks = true,
+}) {
   const [book, setBook] = useState({});
-  const [user_id, setUserId] = useState("");
+  const user_id = getUserID();
   const [isOpenToEdit, setIsOpenToEdit] = useState(false);
   const booksManager = new BooksManager();
-  useEffect(() => {
-    setUserId(document.cookie.split(";")[0].split("=")[1]);
-  }, []);
+
   useEffect(() => {
     const getBook = async () => {
       const getBooks = await booksManager.getBook(id);
@@ -34,37 +39,67 @@ function BookInfo({ isOpen, setIsOpen, id }) {
 
     getBook();
   }, [id]);
-  const handleDaily = async (id) => {
-    if (book.is_in_daily !== true) {
-      const booksManager = new BooksManager();
-      const setInDaily = await booksManager.setInDaily(user_id, id);
+  const handleDaily = async () => {
+    if (!book?.id) return; // لو الكتاب لسه متحملش
 
-      if (setInDaily.error) {
-        return;
-      }
+    if (book.is_in_daily) {
+      const deleteFromDaily = await booksManager.deleteFromDaily(
+        user_id,
+        book.id
+      );
+      setBook({ ...book, is_in_daily: false });
+      setBooks((prev) =>
+        prev.map((b) => (b.id === book.id ? { ...b, is_in_daily: false } : b))
+      );
+      toast("Succsses!!", { description: deleteFromDaily.done });
+    } else {
+      const setInDaily = await booksManager.setInDaily(user_id, book.id);
+      if (setInDaily.error) return;
       setBook({ ...book, is_in_daily: true });
-      toast("Succsses!!", {
-        description: setInDaily.done,
-      });
+      setBooks((prev) =>
+        prev.map((b) => (b.id === book.id ? { ...b, is_in_daily: true } : b))
+      );
+      toast("Succsses!!", { description: setInDaily.done });
     }
   };
 
-  const handleFavourite = async (id) => {
-    if (book.is_in_daily !== true) {
-      const booksManager = new BooksManager();
-      const setInFavourite = await booksManager.setInFavourite(user_id, id);
+  const handleFavourite = async () => {
+    if (!book?.id) return;
 
-      if (setInFavourite.error) {
-        return;
-      }
+    if (book.is_favourite) {
+      const deleteFromFavourite = await booksManager.deleteFromFavourite(
+        user_id,
+        book.id
+      );
+      if (deleteFromFavourite.error) return;
+      setBook({ ...book, is_favourite: false });
+      setBooks((prev) =>
+        prev.map((b) => (b.id === book.id ? { ...b, is_favourite: false } : b))
+      );
+      toast("Succsses!!", { description: deleteFromFavourite.done });
+    } else {
+      const setInFavourite = await booksManager.setInFavourite(
+        user_id,
+        book.id
+      );
+      if (setInFavourite.error) return;
       setBook({ ...book, is_favourite: true });
-      toast("Succsses!!", {
-        description: setInFavourite.done,
-      });
-      
+      setBooks((prev) =>
+        prev.map((b) => (b.id === book.id ? { ...b, is_favourite: true } : b))
+      );
+      toast("Succsses!!", { description: setInFavourite.done });
     }
   };
 
+  const editProps = {
+    setBooks,
+    books,
+    book,
+    setBook,
+    isOpenToEdit,
+    setIsOpenToEdit,
+  };
+  console.log(book);
   return (
     <AlertDialog open={isOpen}>
       <AlertDialogContent className="min-w-lg">
@@ -79,12 +114,14 @@ function BookInfo({ isOpen, setIsOpen, id }) {
           <div className="flex flex-col justify-center">
             <div className="w-full flex justify-between ">
               <div className="">
-                <img
-                  className="w-60 h-50 "
-                  src={book.image_url}
-                  loading="lazy"
-                  alt="book photo"
-                ></img>
+                {book && book.image_url && (
+                  <img
+                    className="w-60 h-50 "
+                    src={book.image_url}
+                    loading="lazy"
+                    alt="book photo"
+                  ></img>
+                )}
               </div>
               <div className="text-black w-full text-right text-lg ml-5 flex flex-col">
                 <h2
@@ -112,7 +149,6 @@ function BookInfo({ isOpen, setIsOpen, id }) {
                     </span>{" "}
                   </p>
 
-          
                   <p>
                     <span lang="ar" className="font-semibold">
                       النوع:{book.book_type}
@@ -132,40 +168,49 @@ function BookInfo({ isOpen, setIsOpen, id }) {
                 </div>
               </div>
             </div>
-            <div className=" w-full flex justify-start pt-10">
-              <button
-                className="duration-500 w-40 h-12 mr-5 disabled:cursor-not-allowed  disabled:opacity-[0.5] bg-black transition transform hover:shadow-2xl hover:scale-110 text-white text-center rounded-xl cursor-pointer"
-                onClick={() => handleFavourite(book.id)}
-                disabled={book.is_favourite}
-              >
-                <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                Add to Favourite
-              </button>
+            {isInBooks && (
+              <div className=" w-full flex justify-start pt-10">
+                <button
+                  className={`duration-500 w-40 h-12 mr-5 cursor-pointer  bg-black transition transform hover:shadow-2xl hover:scale-110 text-white text-center rounded-xl cursor-pointer"`}
+                  onClick={() => handleFavourite(book.id)}
+                >
+                  {book.is_favourite ? (
+                    "Remove from favourite"
+                  ) : (
+                    <div>
+                      <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
+                      Add to Favourite
+                    </div>
+                  )}
+                </button>
 
-              <button
-                onClick={() => handleDaily(book.id)}
-                disabled={book.is_in_daily}
-                className="duration-500 w-32 h-12 disabled:cursor-not-allowed disabled:opacity-[0.5] bg-blue-500 transition transform hover:shadow-2xl hover:scale-110 mr-5 text-white text-center rounded-xl cursor-pointer"
-              >
-                <FontAwesomeIcon icon={faCalendarDay}></FontAwesomeIcon>
-                Add to Daily
-              </button>
+                <button
+                  onClick={() => handleDaily(book.id)}
+                  className="duration-500 w-32 h-12  bg-blue-500 transition transform hover:shadow-2xl hover:scale-110 mr-5 text-white text-center rounded-xl cursor-pointer"
+                >
+                  {book.is_in_daily ? (
+                    "Remove from daily"
+                  ) : (
+                    <div>
+                      <FontAwesomeIcon icon={faCalendarDay}></FontAwesomeIcon>
+                      Add to Daily
+                    </div>
+                  )}
+                </button>
 
-              <button
-                onClick={() => setIsOpenToEdit(true)}
-                className="duration-500 w-32 h-12 bg-gray-500 px-2 transition transform hover:shadow-2xl  hover:scale-110 mr-5 text-white text-center rounded-xl cursor-pointer"
-              >
-                <FontAwesomeIcon icon={faPen}></FontAwesomeIcon>
-                Edit
-              </button>
-            </div>
+                <button
+                  onClick={() => setIsOpenToEdit(true)}
+                  className="duration-500 w-32 h-12 bg-gray-500 px-2 transition transform hover:shadow-2xl  hover:scale-110 mr-5 text-white text-center rounded-xl cursor-pointer"
+                >
+                  <FontAwesomeIcon icon={faPen}></FontAwesomeIcon>
+                  Edit
+                </button>
+              </div>
+            )}
           </div>
         </div>
-           {isOpenToEdit && (
-        <Edit book={book} setBook={setBook} isOpen={isOpenToEdit} setIsOpen={setIsOpenToEdit} />
-      )}
+        {isOpenToEdit && <Edit {...editProps} />}
       </AlertDialogContent>
-   
     </AlertDialog>
   );
 }
