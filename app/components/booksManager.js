@@ -2,7 +2,7 @@ export class BooksManager {
   // دالة عامة للتعامل مع الـ fetch في كل الفانكشنز
   async handleRequest(url, options = {}) {
     try {
-      const request = await fetch(`http://localhost:8000${url}`, {
+      const request = await fetch(`https://library-m2k0.onrender.com${url}`, {
         credentials: "include",
         ...options,
       });
