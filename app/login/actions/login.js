@@ -27,29 +27,6 @@ export  async function login(previous, formData){
     if (response.error){
         return response  
     }
-    const Cookies = await cookies()
-    Cookies.set('token',response.acsses_token,{
-        httpOnly:true,
-        secure:true,
-        path:"/",
-        sameSite:"none",
-        maxAge:60 * 60
-    })
-
-     Cookies.set('refresh_token',response.refresh_token,{
-        httpOnly:true,
-        secure:true,
-        path:"/",
-        sameSite:"none",
-        maxAge:30 * 24 * 60 * 60
-    })
-
-    Cookies.set('user_id',response.id,{
-        httpOnly:false,
-        secure:true,
-        path:"/",
-        maxAge:30 * 24 * 60 * 60
-    })
 
 
     redirect('/')
