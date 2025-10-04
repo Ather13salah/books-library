@@ -20,7 +20,8 @@ export  async function signup(previous, formData){
             name:username,
             password:password,
             email:email
-        })
+        }),
+        credentials:"include"
     })
 
     const response = await request.json()

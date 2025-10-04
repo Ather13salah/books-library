@@ -18,7 +18,8 @@ export  async function login(previous, formData){
         body:JSON.stringify({
             name:username,
             password:password
-        })
+        }),
+        credentials:"include"
     })
 
     const response = await request.json()
