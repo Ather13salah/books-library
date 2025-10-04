@@ -35,7 +35,7 @@ export default function Login() {
           )}
         </button>
 
-        <div className="text-black "><p>Don’t have an account?</p> <Link className="text-sky-400" href={'/signup'} >Signup</Link></div>
+        <div className="text-black ">Don’t have an account? <Link className="text-sky-400" href={'/signup'} >Signup</Link></div>
       </form>
 
       {state?.error && <p className="text-red-500">{state.error}</p>}

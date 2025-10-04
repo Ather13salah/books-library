@@ -10,7 +10,7 @@ export class BooksManager {
       const response = await request.json();
 
       if (response?.invalid_token) {
-        window.location.replace(response.invalid_token);
+        window.location.href = response.invalid_token;
         return;
       }
 
@@ -21,7 +21,7 @@ export class BooksManager {
       return response;
     } catch (error) {
       return {
-        error: `${error} حدث خطأ أثناء الاتصال بالسيرفر، حاول مرة أخرى لاحقًا`,
+        error: `حدث خطأ أثناء الاتصال بالسيرفر، حاول مرة أخرى لاحقًا`,
       };
     }
   }
@@ -127,7 +127,7 @@ export class BooksManager {
   async logOut() {
     const res = await this.handleRequest(`/auth/logout`, { method: "POST" });
     if (res?.message) {
-      window.location.replace('/login')
+      window.location.href = '/login'
     }
 
     return res;

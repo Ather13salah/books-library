@@ -32,6 +32,7 @@ export  async function login(previous, formData){
         httpOnly:true,
         secure:true,
         path:"/",
+        sameSite:"none",
         maxAge:60 * 60
     })
 
@@ -39,6 +40,7 @@ export  async function login(previous, formData){
         httpOnly:true,
         secure:true,
         path:"/",
+        sameSite:"none",
         maxAge:30 * 24 * 60 * 60
     })
 
