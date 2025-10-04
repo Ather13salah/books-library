@@ -12,7 +12,7 @@ export  async function signup(previous, formData){
     if (password.length < 8){
         return{error:'Password at least has 8 characters'}
     }
-    const request = await fetch('http://localhost:8000/auth/signup',{
+    const request = await fetch('https://library-m2k0.onrender.com/auth/signup',{
         method:"POST",
         headers:{
             'Content-Type':'application/json'

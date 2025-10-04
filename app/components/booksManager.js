@@ -2,7 +2,7 @@ export class BooksManager {
   // دالة عامة للتعامل مع الـ fetch في كل الفانكشنز
   async handleRequest(url, options = {}) {
     try {
-      const request = await fetch(`https://library-m2k0.onrender.com${url}`, {
+      const request = await fetch(`http://localhost:8000${url}`, {
         credentials: "include",
         ...options,
       });
@@ -10,7 +10,7 @@ export class BooksManager {
       const response = await request.json();
 
       if (response?.invalid_token) {
-        window.location.href = response.invalid_token;
+        window.location.replace(response.invalid_token);
         return;
       }
 
@@ -20,7 +20,9 @@ export class BooksManager {
 
       return response;
     } catch (error) {
-      return { error: "حدث خطأ أثناء الاتصال بالسيرفر، حاول مرة أخرى لاحقًا" };
+      return {
+        error: `${error} حدث خطأ أثناء الاتصال بالسيرفر، حاول مرة أخرى لاحقًا`,
+      };
     }
   }
 
@@ -123,16 +125,20 @@ export class BooksManager {
     );
   }
   async logOut() {
-    return this.handleRequest(`/auth/logout`, { method: "POST" });
+    const res = await this.handleRequest(`/auth/logout`, { method: "POST" });
+    if (res?.message) {
+      window.location.replace('/login')
+    }
+
+    return res;
   }
 }
 export function getUserID() {
   const cookies = document.cookie.split(";");
-  for(let cookie of cookies){
-    cookie = cookie.trim()
-    if(cookie.startsWith('user_id')){
-      
-      return cookie.split('=')[1]
+  for (let cookie of cookies) {
+    cookie = cookie.trim();
+    if (cookie.startsWith("user_id")) {
+      return cookie.split("=")[1];
     }
   }
   return null;
