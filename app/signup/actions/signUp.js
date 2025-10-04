@@ -26,11 +26,12 @@ export  async function signup(previous, formData){
 
     const response = await request.json()
     
-    if (response.error){
-        return response  
-    }
-    
-    redirect('/')
+   
+  if (response.error) {
+    return response;
+  } else {
+    redirect("/");
+  }
    
 
 }

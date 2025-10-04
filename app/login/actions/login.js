@@ -1,34 +1,32 @@
-'use server';
+"use server";
 import { redirect } from "next/navigation";
-export  async function login(previous, formData){
-    const username = formData.get('username')
-    const password = formData.get('password')
+export async function login(previous, formData) {
+  const username = formData.get("username");
+  const password = formData.get("password");
 
-    if(username === '' || password == ''){
-        return{error:'Please fill all  the inputs'}
-    }
-    if (password.length < 8){
-        return{error:'Password at least has 8 characters'}
-    }
-    const request = await fetch('https://library-m2k0.onrender.com/auth/login',{
-        method:"POST",
-        headers:{
-            'Content-Type':'application/json'
-        },
-        body:JSON.stringify({
-            name:username,
-            password:password
-        }),
-        credentials:"include"
-    })
+  if (username === "" || password == "") {
+    return { error: "Please fill all  the inputs" };
+  }
+  if (password.length < 8) {
+    return { error: "Password at least has 8 characters" };
+  }
+  const request = await fetch("https://library-m2k0.onrender.com/auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: username,
+      password: password,
+    }),
+    credentials: "include",
+  });
 
-    const response = await request.json()
-    
-    if (response.error){
-        return response  
-    }
+  const response = await request.json();
 
-
-    redirect('/')
-
+  if (response.error) {
+    return response;
+  } else {
+    redirect("/");
+  }
 }
