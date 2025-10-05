@@ -1,7 +1,6 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
@@ -17,54 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export default function RootLayout({ children }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function checkAuth() {
-      try {
-        const res = await fetch(`https://library-m2k0.onrender.com/auth/me`, {
-          credentials: "include",
-        });
-
-        // صفحات تسجيل الدخول والتسجيل
-        const isAuthPage = pathname === "/login" || pathname === "/signup";
-
-        if (res.status === 200) {
-          // لو المستخدم داخل بالفعل لكن واقف على صفحة login → رجعه للرئيسية
-          if (isAuthPage) {
-            router.replace("/");
-          }
-        } else {
-          // لو مش داخل وبيحاول يدخل صفحة محمية → رجعه لصفحة login
-          if (!isAuthPage) {
-            router.replace("/login");
-          }
-        }
-      } catch (err) {
-        console.error("Auth check failed:", err);
-        router.replace("/login");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    checkAuth();
-  }, [pathname, router]);
-
-  if (loading) {
-    return (
-      <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} flex items-center justify-center h-screen`}
-        >
-          <div className="w-12 h-12 animate-spin border-purple-500  rounded-full "></div>
-        </body>
-      </html>
-    );
-  }
-
+ 
   return (
     <html lang="en">
       <head>
