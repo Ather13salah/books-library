@@ -18,9 +18,7 @@ function SideBar({ setIsOpen }) {
       return;
     }
     toast(logOut.message);
-    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    document.cookie =
-      "refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    
     document.cookie =
       "user_id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     window.location.href = "/login";
