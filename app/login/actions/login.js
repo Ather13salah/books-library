@@ -12,6 +12,7 @@ export async function login(previous, formData) {
   }
   const request = await fetch("https://library-m2k0.onrender.com/auth/login", {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -19,11 +20,11 @@ export async function login(previous, formData) {
       name: username,
       password: password,
     }),
-    credentials: "include",
+ 
   });
 
   const response = await request.json();
-
+  console.log(response)
   if (response.error) {
     return response;
   } else {

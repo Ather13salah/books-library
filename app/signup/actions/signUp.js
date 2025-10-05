@@ -13,6 +13,7 @@ export  async function signup(previous, formData){
     }
     const request = await fetch('https://library-m2k0.onrender.com/auth/signup',{
         method:"POST",
+        credentials:"include",
         headers:{
             'Content-Type':'application/json'
         },
@@ -21,7 +22,7 @@ export  async function signup(previous, formData){
             password:password,
             email:email
         }),
-        credentials:"include"
+       
     })
 
     const response = await request.json()
