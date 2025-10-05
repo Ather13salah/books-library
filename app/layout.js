@@ -59,7 +59,7 @@ export default function RootLayout({ children }) {
         <body
           className={`${geistSans.variable} ${geistMono.variable} flex items-center justify-center h-screen`}
         >
-          loading...
+          <div className="w-12 h-12 animate-spin border-purple-500  rounded-full "></div>
         </body>
       </html>
     );
