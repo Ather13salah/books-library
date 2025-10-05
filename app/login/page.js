@@ -48,8 +48,6 @@ export default function Login() {
       if (response.id) {
         setLoading(false);
         
-        document.cookie = `token=${response.access_token}; path=/; secure; samesite=None; max-age=3600`;
-        document.cookie = `refresh_token=${response.refresh_token}; path=/; secure; samesite=None; max-age=43200`;
         document.cookie = `user_id=${response.id}; path=/; secure; samesite=None; max-age=43200`;
 
         router.push("/");
