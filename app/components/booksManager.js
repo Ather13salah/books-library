@@ -14,6 +14,10 @@ export class BooksManager {
         return;
       }
 
+      if (response.new_access_token) {
+        document.cookie = `token=${response.new_access_token}; path=/; secure; samesite=None; max-age=3600`;
+      }
+
       if (response?.error) {
         return response;
       }
@@ -127,7 +131,7 @@ export class BooksManager {
   async logOut() {
     const res = await this.handleRequest(`/auth/logout`, { method: "POST" });
     if (res?.message) {
-      window.location.href = '/login'
+      window.location.href = "/login";
     }
 
     return res;
