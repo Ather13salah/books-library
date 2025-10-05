@@ -12,15 +12,18 @@ function Books() {
   const [error, setError] = useState(null);
   const [isOpen, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const user_id = getUserID()
+  const [userId, setUserId] = useState("");
+
   const booksManager = new BooksManager();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setUserId(getUserID());
+  }, []);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     setLoading(true);
     const getBooks = async () => {
-    
-
-      const getBooks = await booksManager.getBooks(user_id);
+      const getBooks = await booksManager.getBooks(userId);
       if (getBooks.error) {
         setLoading(false);
         return;
@@ -30,7 +33,7 @@ function Books() {
     };
 
     getBooks();
-  }, []);
+  }, [userId]);
 
   const handleChange = async (e) => {
     setLoading(true);
@@ -39,7 +42,7 @@ function Books() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const newBook = await booksManager.addBook(formData,user_id);
+      const newBook = await booksManager.addBook(formData, userId);
 
       if (newBook.error) {
         setError(newBook.error);
@@ -60,7 +63,7 @@ function Books() {
 
   return (
     <div className="bg-white flex justify-center items-center w-screen min-h-screen">
-      <BackArrow goTo="/"/>
+      <BackArrow goTo="/" />
       {/* this section for adding errors or messages for user */}
       {error && toast(error)}
       {loading ? (
@@ -69,8 +72,11 @@ function Books() {
         </div>
       ) : Books && Books.length > 0 ? (
         <div className="flex flex-col w-full h-screen p-6">
-          <div className="w-full h-16 flex justify-center items-start"> 
-            <h1 className="font-bold text-center text-2xl "> All Books: {Books.length}</h1>
+          <div className="w-full h-16 flex justify-center items-start">
+            <h1 className="font-bold text-center text-2xl ">
+              {" "}
+              All Books: {Books.length}
+            </h1>
           </div>
 
           <AddBookImg
@@ -95,10 +101,16 @@ function Books() {
             }
             handleChange={handleChange}
           />
-        
         </div>
       )}
-      {isOpen && <AddBook books={Books} setBooks={setBooks} isOpen={isOpen} setIsOpen={setOpen} />}
+      {isOpen && (
+        <AddBook
+          books={Books}
+          setBooks={setBooks}
+          isOpen={isOpen}
+          setIsOpen={setOpen}
+        />
+      )}
     </div>
   );
 }

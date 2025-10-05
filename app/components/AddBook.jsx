@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
-import { BooksManager } from "./booksManager";
+import { BooksManager,getUserID } from "./booksManager";
 function AddBook({ isOpen, setIsOpen, books, setBooks }) {
   const [bookName, setBookName] = useState("");
   const [writer, setWriter] = useState("");
@@ -17,6 +17,7 @@ function AddBook({ isOpen, setIsOpen, books, setBooks }) {
   const [preview, setPreview] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState("");
   const [error, setError] = useState("");
 
   const labelStyle = `text-lg ${
@@ -28,6 +29,10 @@ function AddBook({ isOpen, setIsOpen, books, setBooks }) {
 
   const booksManager = new BooksManager();
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+      setUserId(getUserID());
+    }, []);
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -70,7 +75,7 @@ function AddBook({ isOpen, setIsOpen, books, setBooks }) {
     formData.append("category", category);
     formData.append("total_pages", total_pages);
     if (image) formData.append("file", image);
-    const newBook = await booksManager.addBookManually(formData,user_id);
+    const newBook = await booksManager.addBookManually(formData,userId);
     if (newBook.error) {
       setError(newBook.error);
       setLoading(false);
