@@ -50,9 +50,16 @@ export default function Signup() {
        if (response.id) {
         setLoading(false);
 
-        document.cookie = `token=${response.access_token}; path=/; secure; samesite=None`;
-        document.cookie = `refresh_token=${response.refresh_token}; path=/; secure; samesite=None`;
-        document.cookie = `user_id=${response.id}; path=/; secure; samesite=None`;
+        const oneHour = 60 * 60 * 1000;
+        // 30 days in milliseconds
+        const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+
+        // Calculate expiration dates
+        const tokenExpires = new Date(Date.now() + oneHour).toUTCString();
+        const refreshExpires = new Date(Date.now() + thirtyDays).toUTCString();
+        document.cookie = `token=${response.access_token}; path=/; secure; samesite=None; expires=${tokenExpires}`;
+        document.cookie = `refresh_token=${response.refresh_token}; path=/; secure; samesite=None; expires=${refreshExpires}`;
+        document.cookie = `user_id=${response.id}; path=/; secure; samesite=None; expires=${refreshExpires}`;
 
         router.push("/");
       }
