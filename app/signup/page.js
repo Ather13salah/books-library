@@ -47,8 +47,13 @@ export default function Signup() {
         setError(response.error);
         return;
       }
-       if (response.ok) {
+       if (response.id) {
         setLoading(false);
+
+        document.cookie = `token=${response.access_token}; path=/; secure; samesite=None`;
+        document.cookie = `refresh_token=${response.refresh_token}; path=/; secure; samesite=None`;
+        document.cookie = `user_id=${response.id}; path=/; secure; samesite=None`;
+
         router.push("/");
       }
     } catch {

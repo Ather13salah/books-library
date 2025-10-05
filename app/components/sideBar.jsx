@@ -18,7 +18,12 @@ function SideBar({ setIsOpen }) {
       return;
     }
     toast(logOut.message);
-    window.location.href = '/login'
+    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie =
+      "refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie =
+      "user_id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    window.location.href = "/login";
   };
   return (
     <div className="transition-all fixed top-0 left-0 h-screen w-64 bg-black/80 text-white p-4  ">
