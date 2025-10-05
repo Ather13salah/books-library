@@ -30,15 +30,15 @@ export class BooksManager {
     }
   }
 
-  async addBook(image) {
-    return this.handleRequest("/protected/books/upload-book", {
+  async addBook(image,user_id) {
+    return this.handleRequest(`/protected/books/upload-book?user_id=${user_id}`, {
       method: "POST",
       body: image,
     });
   }
 
-  async addBookManually(formData) {
-    return this.handleRequest("/protected/books/add-book", {
+  async addBookManually(formData,user_id) {
+    return this.handleRequest(`/protected/books/add-book?user_id=${user_id}`, {
       method: "POST",
       body: formData,
     });

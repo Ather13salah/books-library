@@ -70,7 +70,7 @@ function AddBook({ isOpen, setIsOpen, books, setBooks }) {
     formData.append("category", category);
     formData.append("total_pages", total_pages);
     if (image) formData.append("file", image);
-    const newBook = await booksManager.addBookManually(formData);
+    const newBook = await booksManager.addBookManually(formData,user_id);
     if (newBook.error) {
       setError(newBook.error);
       setLoading(false);

@@ -12,12 +12,13 @@ function Books() {
   const [error, setError] = useState(null);
   const [isOpen, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const user_id = getUserID()
   const booksManager = new BooksManager();
 
   useEffect(() => {
     setLoading(true);
     const getBooks = async () => {
-      const user_id = getUserID()
+    
 
       const getBooks = await booksManager.getBooks(user_id);
       if (getBooks.error) {
@@ -38,7 +39,7 @@ function Books() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const newBook = await booksManager.addBook(formData);
+      const newBook = await booksManager.addBook(formData,user_id);
 
       if (newBook.error) {
         setError(newBook.error);
