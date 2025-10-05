@@ -14,7 +14,7 @@ function Books() {
   const [loading, setLoading] = useState(false);
   const user_id = getUserID()
   const booksManager = new BooksManager();
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     setLoading(true);
     const getBooks = async () => {
