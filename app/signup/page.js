@@ -47,7 +47,10 @@ export default function Signup() {
         setError(response.error);
         return;
       }
-      router.push("/");
+       if (response.ok) {
+        setLoading(false);
+        router.push("/");
+      }
     } catch {
       setError("  `حدث خطأ أثناء الاتصال بالسيرفر، حاول مرة أخرى لاحقًا`");
     }
