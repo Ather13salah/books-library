@@ -1,6 +1,5 @@
 "use client";
 
-
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
@@ -16,7 +15,6 @@ const geistMono = Geist_Mono({
 });
 
 export default function RootLayout({ children }) {
- 
   return (
     <html lang="en">
       <head>
