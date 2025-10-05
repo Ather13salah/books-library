@@ -130,10 +130,7 @@ export class BooksManager {
   }
   async logOut() {
     const res = await this.handleRequest(`/auth/logout`, { method: "POST" });
-    if (res?.message) {
-      window.location.href = "/login";
-    }
-
+   
     return res;
   }
 }

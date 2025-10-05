@@ -59,7 +59,7 @@ export default function RootLayout({ children }) {
         <body
           className={`${geistSans.variable} ${geistMono.variable} flex items-center justify-center h-screen`}
         >
-          Checking session...
+          loading...
         </body>
       </html>
     );
