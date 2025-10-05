@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -17,7 +18,8 @@ const geistMono = Geist_Mono({
 
 export default function RootLayout({ children }) {
   const router = useRouter();
-
+  const pathname = usePathname();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function checkAuth() {
@@ -25,18 +27,43 @@ export default function RootLayout({ children }) {
         const res = await fetch(`https://library-m2k0.onrender.com/auth/me`, {
           credentials: "include",
         });
+
+        // صفحات تسجيل الدخول والتسجيل
+        const isAuthPage = pathname === "/login" || pathname === "/signup";
+
         if (res.status === 200) {
-          router.push('/')
+          // لو المستخدم داخل بالفعل لكن واقف على صفحة login → رجعه للرئيسية
+          if (isAuthPage) {
+            router.replace("/");
+          }
         } else {
-          router.push("/login");
+          // لو مش داخل وبيحاول يدخل صفحة محمية → رجعه لصفحة login
+          if (!isAuthPage) {
+            router.replace("/login");
+          }
         }
       } catch (err) {
-        router.push("/login");
+        console.error("Auth check failed:", err);
+        router.replace("/login");
+      } finally {
+        setLoading(false);
       }
     }
 
     checkAuth();
-  }, []);
+  }, [pathname, router]);
+
+  if (loading) {
+    return (
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} flex items-center justify-center h-screen`}
+        >
+          Checking session...
+        </body>
+      </html>
+    );
+  }
 
   return (
     <html lang="en">
@@ -46,7 +73,7 @@ export default function RootLayout({ children }) {
         <link rel="manifest" href="/manifest.json" />
         <title>Maktabty</title>
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} `}>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
         <Toaster richColors position="top-right" />
       </body>
