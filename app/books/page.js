@@ -21,7 +21,7 @@ function Books() {
   }, []);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if(!userId)return;
+    if (!userId) return;
     setLoading(true);
     const getBooks = async () => {
       const getBooks = await booksManager.getBooks(userId);
@@ -80,13 +80,28 @@ function Books() {
             </h1>
           </div>
 
-          <AddBookImg
-            label={"+"}
-            style={
-              "flex justify-center cursor-pointer w-12 h-12 fixed top-1 right-1 bg-purple-600 rounded-full font-bold text-3xl text-white"
-            }
-            handleChange={handleChange}
-          />
+          <details className=" fixed top-2 right-2 p-4 shadow-md ">
+            <summary className="cursor-pointer text-purple-600 text-center mt-3.5 w-36  rounded-lg ">
+              Add New
+            </summary>
+            <button
+              className="cursor-pointer bg-purple-600 text-center mt-3.5 text-amber-50 w-full rounded-md "
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              Add Manual
+
+            </button>
+            <AddBookImg
+              label={"Add Image"}
+              style={
+                "cursor-pointer bg-purple-600 text-center mt-3.5 text-amber-50 w-full rounded-md "
+              }
+              handleChange={handleChange}
+            />
+            
+          </details>
           <BooksDisplay Books={Books} setBooks={setBooks} />
         </div>
       ) : (
@@ -95,13 +110,28 @@ function Books() {
           <div className="text-black text-3xl">
             <h1>No Books Found</h1>
           </div>
-          <AddBookImg
-            label={"Add Book"}
-            style={
-              "cursor-pointer  bg-purple-600 text-center mt-3.5 text-amber-50 w-24  rounded-lg "
-            }
-            handleChange={handleChange}
-          />
+          <details className="p-4 shadow-md">
+            <summary className="cursor-pointer text-purple-600 text-center mt-3.5 w-36  rounded-md ">
+              Add New Book
+            </summary>
+            <button
+              className="cursor-pointer bg-purple-600 text-center mt-3.5 text-amber-50 w-full rounded-md "
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              Add Manual
+
+            </button>
+            <AddBookImg
+              label={"Add Image"}
+              style={
+                "cursor-pointer bg-purple-600 text-center mt-3.5 text-amber-50 w-full rounded-md "
+              }
+              handleChange={handleChange}
+            />
+            
+          </details>
         </div>
       )}
       {isOpen && (

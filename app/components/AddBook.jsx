@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import {
   AlertDialog,
   AlertDialogTitle,
@@ -155,12 +155,13 @@ function AddBook({ isOpen, setIsOpen, books, setBooks }) {
             />
 
             {preview ? (
-              <div>
+              <div className=" w-24 h-24 mt-4 relative">
                 <img
-                  className="w-24 h-24 mt-4 bg-white"
+                  className="w-full h-full  bg-white"
                   src={preview}
                   alt="Book preview"
                 ></img>
+                <FontAwesomeIcon className="absolute cursor-pointer top-0   right-0 text-amber-50 p-1 rounded" onClick={()=>{setPreview("")}} icon={faX}></FontAwesomeIcon>
               </div>
             ) : (
               <div  className={`${error && 'bg-red-500 text-white underline'}`}>
@@ -185,7 +186,7 @@ function AddBook({ isOpen, setIsOpen, books, setBooks }) {
             className="active:opacity-[0.5] mr-3 w-24 h-8 text-center cursor-pointer bg-black rounded-lg text-white"
             onClick={handleSave}
           >
-            {loading ? "Saving..." : "Save"}
+            {loading ? "Adding..." : "Add"}
           </button>
           <button
             className="w-24 h-8 bg-gray-100 rounded-lg text-center cursor-pointer text-black"
