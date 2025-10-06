@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
         <link rel="manifest" href="/manifest.json" />
         <title>Maktabty</title>
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} bg-white`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} `}>
         {children}
         <Toaster richColors position="top-right" />
       </body>

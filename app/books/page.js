@@ -6,6 +6,9 @@ import AddBook from "../components/AddBook";
 import AddBookImg from "../components/AddBookImg";
 import BackArrow from "../components/BackArrow";
 import { toast } from "sonner";
+import Filter from "../components/Filter";
+import Search from "../components/Search";
+import AddChoices from "../components/AddChoices";
 
 function Books() {
   const [Books, setBooks] = useState([]);
@@ -80,28 +83,11 @@ function Books() {
             </h1>
           </div>
 
-          <details className=" fixed top-2 right-2 p-4 shadow-md ">
-            <summary className="cursor-pointer text-purple-600 text-center mt-3.5 w-36  rounded-lg ">
-              Add New
-            </summary>
-            <button
-              className="cursor-pointer bg-purple-600 text-center mt-3.5 text-amber-50 w-full rounded-md "
-              onClick={() => {
-                setOpen(true);
-              }}
-            >
-              Add Manual
-
-            </button>
-            <AddBookImg
-              label={"Add Image"}
-              style={
-                "cursor-pointer bg-purple-600 text-center mt-3.5 text-amber-50 w-full rounded-md "
-              }
-              handleChange={handleChange}
-            />
-            
-          </details>
+          <AddChoices handleChange={handleChange} setOpen={setOpen}/>
+          <div className="w-52 flex justify-between">
+            <Filter books={Books} category={''}/>
+            <Search books={Books}/>
+          </div>
           <BooksDisplay Books={Books} setBooks={setBooks} />
         </div>
       ) : (
@@ -110,28 +96,7 @@ function Books() {
           <div className="text-black text-3xl">
             <h1>No Books Found</h1>
           </div>
-          <details className="p-4 shadow-md">
-            <summary className="cursor-pointer text-purple-600 text-center mt-3.5 w-36  rounded-md ">
-              Add New Book
-            </summary>
-            <button
-              className="cursor-pointer bg-purple-600 text-center mt-3.5 text-amber-50 w-full rounded-md "
-              onClick={() => {
-                setOpen(true);
-              }}
-            >
-              Add Manual
-
-            </button>
-            <AddBookImg
-              label={"Add Image"}
-              style={
-                "cursor-pointer bg-purple-600 text-center mt-3.5 text-amber-50 w-full rounded-md "
-              }
-              handleChange={handleChange}
-            />
-            
-          </details>
+           <AddChoices handleChange={handleChange} setOpen={setOpen}/>
         </div>
       )}
       {isOpen && (
