@@ -35,13 +35,19 @@ function BooksDisplay({ Books, setBooks }) {
       if (copyBooks[i].id === book_id) {
         if (copyBooks[i].is_favourite) {
           const res = await booksManager.deleteFromFavourite(user_id, book_id);
-          if (res.error) return;
+          if (res.error) {
+            toast("Error", { description: res.error });
+            return;
+          }
 
           copyBooks[i] = { ...copyBooks[i], is_favourite: false };
           toast("Success!!", { description: res.done });
         } else {
           const res = await booksManager.setInFavourite(user_id, book_id);
-          if (res.error) return;
+          if (res.error) {
+            toast("Error", { description: res.error });
+            return;
+          }
 
           copyBooks[i] = { ...copyBooks[i], is_favourite: true };
           toast("Success!!", { description: res.done });
@@ -61,13 +67,19 @@ function BooksDisplay({ Books, setBooks }) {
       if (copyBooks[i].id === book_id) {
         if (copyBooks[i].is_in_daily) {
           const res = await booksManager.deleteFromDaily(user_id, book_id);
-          if (res.error) toast('Error',{description:res.error});
+          if (res.error) {
+            toast("Error", { description: res.error });
+            return;
+          }
 
           copyBooks[i] = { ...copyBooks[i], is_in_daily: false };
           toast("Success!!", { description: res.done });
         } else {
           const res = await booksManager.setInDaily(user_id, book_id);
-          if (res.error) toast('Error',{description:res.error});
+          if (res.error) {
+            toast("Error", { description: res.error });
+            return;
+          }
 
           copyBooks[i] = { ...copyBooks[i], is_in_daily: true };
           toast("Success!!", { description: res.done });
