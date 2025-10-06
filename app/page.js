@@ -43,22 +43,25 @@ export default function Home() {
     checkAuth();
   }, [pathname, router]);
   return (
-    <div className="w-screen h-screen flex flex-col justify-center items-center bg-black bg-[url('/assets/background.jpg')] bg-center bg-cover">
+    <div>
       {loading ? (
         <div className="w-12 h-12 animate-spin border-purple-500  rounded-full "></div>
       ) : (
-        <div className="   ">
-          <FontAwesomeIcon
-            icon={faBars}
-            className="duration-300 absolute text-amber-50 font-bold top-3 left-4 cursor-pointer"
-            onClick={() => setIsOpen(true)}
-          ></FontAwesomeIcon>
-          <div className="text-amber-50 text-5xl font-bold animate-none">
-            Welcome to Maktabty
-          </div>
-          <div className="text-amber-50 text-2xl font-bold mt-6">
-            Here you’ll find my collection, the best books, your favorites,{" "}
-            <br></br>and daily reading suggestions 📖
+        <div className="w-screen h-screen flex flex-col justify-center items-center bg-black bg-[url('/assets/background.jpg')] bg-center bg-cover">
+          {" "}
+          <div className="   ">
+            <FontAwesomeIcon
+              icon={faBars}
+              className="duration-300 absolute text-amber-50 font-bold top-3 left-4 cursor-pointer"
+              onClick={() => setIsOpen(true)}
+            ></FontAwesomeIcon>
+            <div className="text-amber-50 text-5xl font-bold animate-none">
+              Welcome to Maktabty
+            </div>
+            <div className="text-amber-50 text-2xl font-bold mt-6">
+              Here you’ll find my collection, the best books, your favorites,{" "}
+              <br></br>and daily reading suggestions 📖
+            </div>
           </div>
         </div>
       )}
