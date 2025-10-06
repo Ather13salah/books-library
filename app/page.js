@@ -45,7 +45,7 @@ export default function Home() {
   return (
     <div>
       {loading ? (
-        <div className="w-12 h-12 animate-spin border-purple-500  rounded-full "></div>
+        <div className=" bg-white w-12 h-12 animate-spin border-purple-500  rounded-full "></div>
       ) : (
         <div className="w-screen h-screen flex flex-col justify-center items-center bg-black bg-[url('/assets/background.jpg')] bg-center bg-cover">
           {" "}
