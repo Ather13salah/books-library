@@ -16,29 +16,20 @@ import {
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 function BookInfo({
+  book,
+  setBook,
   isOpen,
   books,
   setBooks,
   setIsOpen,
-  id,
   isInBooks = true,
 }) {
-  const [book, setBook] = useState({});
+
   const user_id = getUserID();
   const [isOpenToEdit, setIsOpenToEdit] = useState(false);
   const booksManager = new BooksManager();
 
-  useEffect(() => {
-    const getBook = async () => {
-      const getBooks = await booksManager.getBook(id);
-      if (getBooks.error) {
-        return;
-      }
-      setBook(getBooks.book);
-    };
-
-    getBook();
-  }, [id]);
+  
   const handleDaily = async () => {
     if (!book?.id) return; // لو الكتاب لسه متحملش
 

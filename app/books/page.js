@@ -3,17 +3,20 @@ import { useEffect, useState } from "react";
 import { BooksManager, getUserID } from "../components/booksManager";
 import BooksDisplay from "../components/BooksDisplay";
 import AddBook from "../components/AddBook";
-import AddBookImg from "../components/AddBookImg";
 import BackArrow from "../components/BackArrow";
 import { toast } from "sonner";
 import Filter from "../components/Filter";
 import Search from "../components/Search";
 import AddChoices from "../components/AddChoices";
+import ViewBookInfo from "../components/ViewBookInfo";
 
 function Books() {
   const [Books, setBooks] = useState([]);
-  const [error, setError] = useState(null);
+  const [displayedBooks, setDisplayedBooks] = useState(Books);
+  const [newBook, setNewBook] = useState({});
+  const [error, setError] = useState("");
   const [isOpen, setOpen] = useState(false);
+  const [isOpenToView, setIsOpenToView] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState("");
 
@@ -32,7 +35,7 @@ function Books() {
         setLoading(false);
         return;
       }
-      setBooks(getBooks.books);
+      setBooks(getBooks.books.reverse());
       setLoading(false);
     };
 
@@ -46,21 +49,17 @@ function Books() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const newBook = await booksManager.addBook(formData, userId);
+      const book = await booksManager.uploadImage(formData, userId);
 
-      if (newBook.error) {
-        setError(newBook.error);
+      if (book.error) {
+        setError(book.error);
         setLoading(false);
         return;
       }
 
-      if (newBook.warning) {
-        setOpen(true);
-        setLoading(false);
-        return;
-      }
-
-      setBooks([...Books, newBook]);
+      
+      setNewBook(book);
+      setIsOpenToView(true);
       setLoading(false);
     }
   };
@@ -74,37 +73,46 @@ function Books() {
         <div className="w-screen h-screen flex justify-center items-center ">
           <div className="w-12 h-12 border-3  border-purple-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
-      ) : Books && Books.length > 0 ? (
-        <div className="flex flex-col w-full h-screen p-6">
-          <div className="w-full h-16 flex justify-center items-start">
-            <h1 className="font-bold text-center text-2xl ">
+      ) : displayedBooks && displayedBooks.length > 0 ? (
+        <div className="flex flex-col w-screen h-screen p-8">
+          <div className="w-full h-16 flex justify-between items-start">
+            <div className="font-bold w-44 mr-3 text-center text-2xl ">
               {" "}
-              All Books: {Books.length}
-            </h1>
+              All Books: {displayedBooks.length}
+            </div>
+            <div className="w-full">
+              <AddChoices handleChange={handleChange} setOpen={setOpen} />
+              <Filter books={Books} setDisplayedBooks={setDisplayedBooks} />
+              <Search books={Books} setDisplayedBooks={setDisplayedBooks}/>
+            </div>
           </div>
 
-          <AddChoices handleChange={handleChange} setOpen={setOpen}/>
-          <div className="w-52 flex justify-between">
-            <Filter books={Books} category={''}/>
-            <Search books={Books}/>
-          </div>
-          <BooksDisplay Books={Books} setBooks={setBooks} />
+          <BooksDisplay Books={displayedBooks} setBooks={setDisplayedBooks} />
         </div>
       ) : (
         // this for display book card of all info
         <div className="w-full flex justify-center items-center flex-col">
-          <div className="text-black text-3xl">
+          <div className="text-black font-bold text-3xl">
             <h1>No Books Found</h1>
           </div>
-           <AddChoices handleChange={handleChange} setOpen={setOpen}/>
+          <AddChoices handleChange={handleChange} setOpen={setOpen} />
         </div>
       )}
       {isOpen && (
         <AddBook
-          books={Books}
-          setBooks={setBooks}
+          books={displayedBooks}
+          setBooks={setDisplayedBooks}
           isOpen={isOpen}
           setIsOpen={setOpen}
+        />
+      )}
+      {isOpenToView && (
+        <ViewBookInfo
+          book={newBook}
+          books={displayedBooks}
+          setBooks={setDisplayedBooks}
+          isOpenToview={isOpenToView}
+          setIsOpenToView={setIsOpenToView}
         />
       )}
     </div>

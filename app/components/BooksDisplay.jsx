@@ -13,7 +13,7 @@ import BookInfo from "./BookInfo";
 function BooksDisplay({ Books, setBooks }) {
   const user_id = getUserID();
   const [isOpen, setIsOpen] = useState(false);
-  const [bookId, setBookId] = useState("");
+  const [book, setBook] = useState({});
   const booksManager = new BooksManager();
 
   // 🗑️ Delete
@@ -92,7 +92,12 @@ function BooksDisplay({ Books, setBooks }) {
   };
 
   const handleOpen = (book_id) => {
-    setBookId(book_id);
+    Books.map((book)=>{
+      if(book.id === book_id){
+        setBook(book)
+      }
+    })
+    
     setIsOpen(true);
   };
 
@@ -119,7 +124,7 @@ function BooksDisplay({ Books, setBooks }) {
               <h3
                 dir="rtl"
                 className={`text-xl ${
-                  book.book_name.length > 12 && "line-clamp-1"
+                  book.book_name?.length > 12 && "line-clamp-1"
                 } text-center cursor-text text-black mt-4`}
               >
                 {book.book_name}
@@ -161,10 +166,11 @@ function BooksDisplay({ Books, setBooks }) {
       ))}
       {isOpen && (
         <BookInfo
+          book={book}
+          setBook={setBook}
           books={Books}
           setBooks={setBooks}
           isOpen={isOpen}
-          id={bookId}
           setIsOpen={setIsOpen}
         />
       )}

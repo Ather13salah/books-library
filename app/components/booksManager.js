@@ -30,14 +30,45 @@ export class BooksManager {
     }
   }
 
-  async addBook(image,user_id) {
-    return this.handleRequest(`/protected/books/upload-book?user_id=${user_id}`, {
-      method: "POST",
-      body: image,
-    });
+  async uploadImage(image, user_id) {
+    return this.handleRequest(
+      `/protected/books/upload-book?user_id=${user_id}`,
+      {
+        method: "POST",
+        body: image,
+      }
+    );
   }
 
-  async addBookManually(formData,user_id) {
+  async addBook(
+    name,
+    writer,
+    publisher,
+    category,
+    total_pages,
+    image_return,
+    user_id,
+    id
+  ) {
+    return this.handleRequest(
+      `/protected/books/add-book-data?user_id=${user_id}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: id,
+          book_name: name,
+          writer: writer,
+          publisher: publisher,
+          category: category,
+          total_pages: total_pages,
+          image_return: image_return,
+        }),
+      }
+    );
+  }
+
+  async addBookManually(formData, user_id) {
     return this.handleRequest(`/protected/books/add-book?user_id=${user_id}`, {
       method: "POST",
       body: formData,
@@ -130,7 +161,7 @@ export class BooksManager {
   }
   async logOut() {
     const res = await this.handleRequest(`/auth/logout`, { method: "POST" });
-   
+
     return res;
   }
 }
