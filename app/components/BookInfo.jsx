@@ -142,7 +142,7 @@ function BookInfo({
 
                   <p>
                     <span lang="ar" className="font-semibold">
-                      النوع:{book.book_type}
+                      النوع:كتاب نصي
                     </span>{" "}
                   </p>
                   <p>

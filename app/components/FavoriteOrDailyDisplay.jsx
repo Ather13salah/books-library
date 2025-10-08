@@ -3,17 +3,24 @@ import { useState } from "react";
 import BookInfo from "./BookInfo";
 
 function FavoriteOrDailyDisplay({ Books, setBooks, handleDelete }) {
+
   const [isOpen, setIsOpen] = useState(false);
+  const [Book, setBook] = useState(false);
+  const handleOpen = (index) =>{
+    
+    setBook(Books[index])
+    setIsOpen(true)
+  }
   return (
     <div className="flex flex-row flex-wrap space-x-4">
-      {Books.map((book) => (
+      {Books.map((book,index) => (
         <div key={book.id}>
           <div
             key={book.id}
             className="flex justify-start flex-col duration-500 transition transform hover:shadow-2xl hover:scale-110 w-70 max-h-96 rounded-xl cursor-pointer"
           >
             <div
-              onClick={() => setIsOpen(true)}
+              onClick={() => handleOpen(index)}
               className="w-full h-full flex pt-1.5 justify-center rounded-t-xl bg-gray-200 "
             >
               <img
@@ -36,7 +43,7 @@ function FavoriteOrDailyDisplay({ Books, setBooks, handleDelete }) {
               <div className="w-full flex justify-between  pt-3 pr-2.5">
                 <div
                   className="ml-5 hover:underline hover:text-blue-500 transition-all"
-                  onClick={() => setIsOpen(true)}
+                  onClick={() => handleOpen(index) }
                 >
                   View more
                 </div>
@@ -55,7 +62,8 @@ function FavoriteOrDailyDisplay({ Books, setBooks, handleDelete }) {
               setBooks={setBooks}
               isOpen={isOpen}
               setIsOpen={setIsOpen}
-              id={book.id}
+              book={Book}
+              setBook={setBook}
               isInBooks={false}
             />
           )}

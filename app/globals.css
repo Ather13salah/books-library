@@ -113,10 +113,13 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
   body {
-    @apply bg-background text-foreground;
+    @apply w-screen h-auto overflow-x-hidden bg-white;
+  }
+
+  @media (min-width: 768px) {
+    body {
+      @apply w-full h-auto;
+    }
   }
 }

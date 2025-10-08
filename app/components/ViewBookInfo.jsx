@@ -61,7 +61,7 @@ function ViewBookInfo({
       setLoading(false);
       return;
     }
-    setBooks([...books,newBook ])
+    setBooks(prevBooks => [...prevBooks, newBook]);
     setLoading(false);
     setIsOpenToView(false);
   };

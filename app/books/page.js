@@ -41,7 +41,10 @@ function Books() {
 
     getBooks();
   }, [userId]);
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setDisplayedBooks(Books);
+  }, [Books]);
   const handleChange = async (e) => {
     setLoading(true);
     if (e.target.files.length > 0) {
@@ -57,7 +60,6 @@ function Books() {
         return;
       }
 
-      
       setNewBook(book);
       setIsOpenToView(true);
       setLoading(false);
@@ -73,7 +75,7 @@ function Books() {
         <div className="w-screen h-screen flex justify-center items-center ">
           <div className="w-12 h-12 border-3  border-purple-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
-      ) : displayedBooks && displayedBooks.length > 0 ? (
+      ) : Books && Books.length > 0 ? (
         <div className="flex flex-col w-screen h-screen p-8">
           <div className="w-full h-16 flex justify-between items-start">
             <div className="font-bold w-44 mr-3 text-center text-2xl ">
@@ -83,7 +85,7 @@ function Books() {
             <div className="w-full">
               <AddChoices handleChange={handleChange} setOpen={setOpen} />
               <Filter books={Books} setDisplayedBooks={setDisplayedBooks} />
-              <Search books={Books} setDisplayedBooks={setDisplayedBooks}/>
+              <Search books={Books} setDisplayedBooks={setDisplayedBooks} />
             </div>
           </div>
 
@@ -100,8 +102,9 @@ function Books() {
       )}
       {isOpen && (
         <AddBook
-          books={displayedBooks}
-          setBooks={setDisplayedBooks}
+          books={Books}
+          setBooks={setBooks}
+          displayedBooks={setDisplayedBooks}
           isOpen={isOpen}
           setIsOpen={setOpen}
         />
@@ -109,8 +112,8 @@ function Books() {
       {isOpenToView && (
         <ViewBookInfo
           book={newBook}
-          books={displayedBooks}
-          setBooks={setDisplayedBooks}
+          books={Books}
+          setBooks={setBooks}
           isOpenToview={isOpenToView}
           setIsOpenToView={setIsOpenToView}
         />

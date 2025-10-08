@@ -8,7 +8,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { BooksManager,getUserID } from "./booksManager";
-function AddBook({ isOpen, setIsOpen, books, setBooks }) {
+function AddBook({ isOpen, setIsOpen, books, setBooks,displayedBooks }) {
   const [bookName, setBookName] = useState("");
   const [writer, setWriter] = useState("");
   const [publisher, setPublisher] = useState("");
@@ -81,8 +81,8 @@ function AddBook({ isOpen, setIsOpen, books, setBooks }) {
       setLoading(false);
       return;
     }
-    setBooks([...books,newBook])
-
+    setBooks(prevBooks => [...prevBooks, newBook]);
+    displayedBooks(books)
     setLoading(false);
     setIsOpen(false);
   };
