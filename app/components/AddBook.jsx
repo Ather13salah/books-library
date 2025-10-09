@@ -13,7 +13,7 @@ function AddBook({ isOpen, setIsOpen, books, setBooks,displayedBooks }) {
   const [writer, setWriter] = useState("");
   const [publisher, setPublisher] = useState("");
   const [category, setCategory] = useState("");
-  const [total_pages, setTotalPages] = useState("");
+  const [total_pages, setTotalPages] = useState(1);
   const [preview, setPreview] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -52,16 +52,14 @@ function AddBook({ isOpen, setIsOpen, books, setBooks,displayedBooks }) {
       setLoading(false);
       return false;
     }
-    if (isNaN(total_pages)){
-      setError("Total pages must be number");
+    if (isNaN(total_pages) || total_pages <= 0){
+      setError("عدد المجلدات خطأ");
       setLoading(false);
       return false;
     }
-    if (!image){
-      setError("Image must be upload it");
-      setLoading(false);
-      return false;
-    }
+    
+    
+    
   };
 
   const handleSave = async () => {
@@ -144,7 +142,7 @@ function AddBook({ isOpen, setIsOpen, books, setBooks,displayedBooks }) {
               className={inputStyle}
             />
 
-            <label className={labelStyle}>عدد الصفحات:</label>
+            <label className={labelStyle}>عدد المجلدات:</label>
             <input
               dir="rtl"
               type="text"

@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import Edit from "./Edit";
 import { BooksManager, getUserID } from "./booksManager";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -14,6 +14,7 @@ import {
   faPen,
   faStar,
   faX,
+  faImage
 } from "@fortawesome/free-solid-svg-icons";
 function BookInfo({
   book,
@@ -24,12 +25,10 @@ function BookInfo({
   setIsOpen,
   isInBooks = true,
 }) {
-
   const user_id = getUserID();
   const [isOpenToEdit, setIsOpenToEdit] = useState(false);
   const booksManager = new BooksManager();
 
-  
   const handleDaily = async () => {
     if (!book?.id) return; // لو الكتاب لسه متحملش
 
@@ -105,13 +104,17 @@ function BookInfo({
           <div className="flex flex-col justify-center">
             <div className="w-full flex justify-between ">
               <div className="">
-                {book && book.image_url && (
+                {book?.image_url ? (
                   <img
-                    className="w-60 h-50 "
+                    className="w-60 h-50"
                     src={book.image_url}
                     loading="lazy"
                     alt="book photo"
-                  ></img>
+                  />
+                ) : (
+                  <div className="w-60 h-50 flex justify-center items-center font-bold text-2xl">
+                    <FontAwesomeIcon icon={faImage}></FontAwesomeIcon>
+                  </div>
                 )}
               </div>
               <div className="text-black w-full text-right text-lg ml-5 flex flex-col">
@@ -153,7 +156,7 @@ function BookInfo({
 
                   <p>
                     <span lang="ar" className="font-semibold">
-                      عدد الصفحات:{book.total_pages}
+                      عدد المجلدات:{book.total_pages}
                     </span>{" "}
                   </p>
                 </div>

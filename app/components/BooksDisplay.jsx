@@ -5,6 +5,7 @@ import {
   faCalendarDay,
   faTrash,
   faStar,
+  faImage,
 } from "@fortawesome/free-solid-svg-icons";
 import { BooksManager, getUserID } from "./booksManager";
 import { useState } from "react";
@@ -92,12 +93,12 @@ function BooksDisplay({ Books, setBooks }) {
   };
 
   const handleOpen = (book_id) => {
-    Books.map((book)=>{
-      if(book.id === book_id){
-        setBook(book)
+    Books.map((book) => {
+      if (book.id === book_id) {
+        setBook(book);
       }
-    })
-    
+    });
+
     setIsOpen(true);
   };
 
@@ -110,13 +111,17 @@ function BooksDisplay({ Books, setBooks }) {
               onClick={() => handleOpen(book.id)}
               className="w-full h-full flex pt-1.5 justify-center rounded-t-xl bg-gray-200 "
             >
-              {book?.image_url && (
+              {book?.image_url ? (
                 <img
                   className="w-60 h-50"
                   src={book.image_url}
                   loading="lazy"
                   alt="book photo"
                 />
+              ) : (
+                <div className="w-60 h-50 flex justify-center items-center font-bold text-2xl">
+                  <FontAwesomeIcon icon={faImage}></FontAwesomeIcon>
+                </div>
               )}
             </div>
 

@@ -20,7 +20,7 @@ function ViewBookInfo({
   const [writer, setWriter] = useState(book?.writer);
   const [publisher, setPublisher] = useState(book?.publisher);
   const [category, setCategory] = useState(book?.category);
-  const [total_pages, setTotalPages] = useState(book?.total_pages);
+  const [total_pages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   let id = book.id;
@@ -45,6 +45,12 @@ function ViewBookInfo({
       setLoading(false);
       return;
     }
+    if (isNaN(total_pages) || total_pages <= 0) {
+      setError("عدد المجلدات خطأ");
+      setLoading(false);
+      return false;
+    }
+    console.log(typeof(total_pages))
 
     const newBook = await booksManager.addBook(
       bookName,
@@ -61,7 +67,7 @@ function ViewBookInfo({
       setLoading(false);
       return;
     }
-    setBooks(prevBooks => [...prevBooks, newBook]);
+    setBooks((prevBooks) => [...prevBooks, newBook]);
     setLoading(false);
     setIsOpenToView(false);
   };
@@ -122,7 +128,7 @@ function ViewBookInfo({
               className={inputStyle}
             />
 
-            <label className={labelStyle}>عدد الصفحات:</label>
+            <label className={labelStyle}>عدد المجلدات:</label>
             <input
               dir="rtl"
               type="text"

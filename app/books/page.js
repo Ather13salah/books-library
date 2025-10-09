@@ -35,7 +35,7 @@ function Books() {
         setLoading(false);
         return;
       }
-      setBooks(getBooks.books.reverse());
+      setBooks(getBooks.books);
       setLoading(false);
     };
 

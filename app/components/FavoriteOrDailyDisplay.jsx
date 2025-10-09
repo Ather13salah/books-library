@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import BookInfo from "./BookInfo";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faImage } from "@fortawesome/free-solid-svg-icons";
 function FavoriteOrDailyDisplay({ Books, setBooks, handleDelete }) {
 
   const [isOpen, setIsOpen] = useState(false);
@@ -23,12 +24,18 @@ function FavoriteOrDailyDisplay({ Books, setBooks, handleDelete }) {
               onClick={() => handleOpen(index)}
               className="w-full h-full flex pt-1.5 justify-center rounded-t-xl bg-gray-200 "
             >
-              <img
-                className="w-60 h-50  ml-2.5"
-                src={book.image_url}
-                loading="lazy"
-                alt="book photo"
-              ></img>
+               {book?.image_url ? (
+                <img
+                  className="w-60 h-50"
+                  src={book.image_url}
+                  loading="lazy"
+                  alt="book photo"
+                />
+              ) : (
+                <div className="w-60 h-50 flex justify-center items-center font-bold text-2xl">
+                  <FontAwesomeIcon icon={faImage}></FontAwesomeIcon>
+                </div>
+              )}
             </div>
 
             <div className="w-full h-50 bg-gray-100 rounded-b-xl">
