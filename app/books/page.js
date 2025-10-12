@@ -45,6 +45,8 @@ function Books() {
     getBooks();
   }, [userId]);
 
+
+
   useEffect(() => {
     let filtered = [...Books];
 
@@ -115,7 +117,7 @@ function Books() {
             </div>
           </div>
 
-          <BooksDisplay Books={displayedBooks} setBooks={setDisplayedBooks} />
+          <BooksDisplay Books={displayedBooks} setBooks={setBooks} />
         </div>
       ) : (
         // this for display book card of all info
