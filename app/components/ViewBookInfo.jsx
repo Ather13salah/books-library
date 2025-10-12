@@ -12,6 +12,7 @@ function ViewBookInfo({
   isOpenToview,
   books,
   setBooks,
+  displayedBooks,
   book,
   setIsOpenToView,
 }) {
@@ -68,6 +69,7 @@ function ViewBookInfo({
       return;
     }
     setBooks((prevBooks) => [...prevBooks, newBook]);
+    displayedBooks(books);
     setLoading(false);
     setIsOpenToView(false);
   };

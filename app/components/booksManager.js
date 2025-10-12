@@ -14,8 +14,8 @@ export class BooksManager {
         return;
       }
 
-      if (response.new_access_token) {
-        document.cookie = `token=${response.new_access_token}; path=/; secure; samesite=None; max-age=3600`;
+      if (response.new_token) {
+        document.cookie = `user_id=${response.id}; path=/; secure; samesite=None; max-age=43200`;
       }
 
       if (response?.error) {
@@ -87,19 +87,12 @@ export class BooksManager {
     });
   }
 
-  async editBook(name, writer, publisher, category, total_pages, user_id, id) {
+  async editBook(formData, user_id, id) {
     return this.handleRequest(
       `/protected/books/edit-book?user_id=${user_id}&id=${id}`,
       {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          book_name: name,
-          writer: writer,
-          publisher: publisher,
-          category: category,
-          total_pages: total_pages,
-        }),
+        body: formData
       }
     );
   }

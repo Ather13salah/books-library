@@ -13,11 +13,13 @@ import ViewBookInfo from "../components/ViewBookInfo";
 function Books() {
   const [Books, setBooks] = useState([]);
   const [displayedBooks, setDisplayedBooks] = useState(Books);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [newBook, setNewBook] = useState({});
   const [error, setError] = useState("");
   const [isOpen, setOpen] = useState(false);
   const [isOpenToView, setIsOpenToView] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [searchItem, setSearch] = useState("");
   const [userId, setUserId] = useState("");
 
   const booksManager = new BooksManager();
@@ -36,15 +38,35 @@ function Books() {
         return;
       }
       setBooks(getBooks.books);
+      setDisplayedBooks(getBooks.books);
       setLoading(false);
     };
 
     getBooks();
   }, [userId]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   useEffect(() => {
-    setDisplayedBooks(Books);
-  }, [Books]);
+    let filtered = [...Books];
+
+    // apply category filter
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter((book) =>
+        selectedCategories.includes(book.category)
+      );
+    }
+
+    // apply search filter
+    if (searchItem.trim() !== "") {
+      filtered = filtered.filter(
+        (book) =>
+          book.book_name?.toLowerCase().includes(searchItem.toLowerCase()) ||
+          book.writer?.toLowerCase().includes(searchItem.toLowerCase())
+      );
+    }
+
+    setDisplayedBooks(filtered);
+  }, [Books, selectedCategories, searchItem]);
+
   const handleChange = async (e) => {
     setLoading(true);
     if (e.target.files.length > 0) {
@@ -84,8 +106,12 @@ function Books() {
             </div>
             <div className="w-full">
               <AddChoices handleChange={handleChange} setOpen={setOpen} />
-              <Filter books={Books} setDisplayedBooks={setDisplayedBooks} />
-              <Search books={Books} setDisplayedBooks={setDisplayedBooks} />
+              <Filter
+                books={Books}
+                selectedCategories={selectedCategories}
+                setSelectedCategories={setSelectedCategories}
+              />
+              <Search searchItem={searchItem} setSearch={setSearch} />
             </div>
           </div>
 
@@ -114,6 +140,7 @@ function Books() {
           book={newBook}
           books={Books}
           setBooks={setBooks}
+          displayedBooks={setDisplayedBooks}
           isOpenToview={isOpenToView}
           setIsOpenToView={setIsOpenToView}
         />

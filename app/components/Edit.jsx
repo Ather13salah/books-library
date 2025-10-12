@@ -16,13 +16,16 @@ function Edit({
   book,
   setIsOpenToEdit,
 }) {
-  const user_id = getUserID()
+  const user_id = getUserID();
   const [bookName, setBookName] = useState(book?.book_name);
   const [writer, setWriter] = useState(book?.writer);
   const [publisher, setPublisher] = useState(book?.publisher);
   const [category, setCategory] = useState(book?.category);
   const [total_pages, setTotalPages] = useState(book?.total_pages);
   const [loading, setLoading] = useState(false);
+  const [preview, setPreview] = useState("");
+  const [image, setImage] = useState(null);
+
   const [error, setError] = useState("");
   let id = book.id;
   const labelStyle = `text-lg ${
@@ -32,9 +35,7 @@ function Edit({
     error && "border-b-red-500"
   } border  border-transparent focus:outline-none focus:border-b-black `;
 
-  const handleSave = async () => {
-    const booksManager = new BooksManager();
-    setLoading(true);
+  const validateData = () => {
     if (
       bookName === "" ||
       writer === "" ||
@@ -44,18 +45,37 @@ function Edit({
     ) {
       setError("Please, Fill all inputs");
       setLoading(false);
-      return;
+      return false;
     }
+    if (isNaN(total_pages) || total_pages <= 0) {
+      setError("عدد المجلدات خطأ");
+      setLoading(false);
+      return false;
+    }
+  };
 
-    const newBook = await booksManager.editBook(
-      bookName,
-      writer,
-      publisher,
-      category,
-      total_pages,
-      user_id,
-      id
-    );
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file)); // يعرض الصورة
+    }
+  };
+
+  const handleSave = async () => {
+    const booksManager = new BooksManager();
+
+    const validation = validateData();
+    if (validation === false) return;
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("book_name", bookName);
+    formData.append("writer", writer);
+    formData.append("publisher", publisher);
+    formData.append("category", category);
+    formData.append("total_pages", total_pages);
+    if (image) formData.append("file", image);
+    const newBook = await booksManager.editBook(formData, user_id, id);
     if (newBook.error) {
       setError(newBook.error);
       setLoading(false);
@@ -67,6 +87,7 @@ function Edit({
       publisher: publisher,
       category: category,
       total_pages: total_pages,
+      image_url: newBook.image_return,
     };
     setBook({
       ...book,
@@ -151,6 +172,41 @@ function Edit({
               onChange={(e) => setTotalPages(e.target.value)}
               className={inputStyle}
             />
+
+            {preview ? (
+              <div className=" w-24 h-24 mt-4 relative">
+                <img
+                  className="w-full h-full  bg-white"
+                  src={preview}
+                  alt="Book preview"
+                ></img>
+                <FontAwesomeIcon
+                  className="absolute cursor-pointer top-0   right-0 text-amber-50 p-1 rounded"
+                  onClick={() => {
+                    setPreview("");
+                  }}
+                  icon={faX}
+                ></FontAwesomeIcon>
+              </div>
+            ) :!book.image_url && (
+              <div className={`${error && "bg-red-500 text-white underline"}`}>
+                <label
+                  htmlFor="book_image"
+                  style={{ cursor: "Pointer" }}
+                  className={`${labelStyle} ${error && "text-white"}`}
+                >
+                  {" "}
+                  ارفق صورة الكتاب
+                </label>
+                <input
+                  id="book_image"
+                  type="file"
+                  name="book_image"
+                  className="hidden"
+                  onChange={handleImageChange}
+                />
+              </div>
+            )}
           </form>
         </div>
         <div className="px-3" dir="ltr">

@@ -1,5 +1,5 @@
 "use client";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   AlertDialog,
   AlertDialogTitle,
@@ -7,8 +7,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
-import { BooksManager,getUserID } from "./booksManager";
-function AddBook({ isOpen, setIsOpen, books, setBooks,displayedBooks }) {
+import { BooksManager, getUserID } from "./booksManager";
+function AddBook({ isOpen, setIsOpen, books, setBooks, displayedBooks }) {
   const [bookName, setBookName] = useState("");
   const [writer, setWriter] = useState("");
   const [publisher, setPublisher] = useState("");
@@ -29,10 +29,10 @@ function AddBook({ isOpen, setIsOpen, books, setBooks,displayedBooks }) {
 
   const booksManager = new BooksManager();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => {
-      setUserId(getUserID());
-    }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setUserId(getUserID());
+  }, []);
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -52,18 +52,15 @@ function AddBook({ isOpen, setIsOpen, books, setBooks,displayedBooks }) {
       setLoading(false);
       return false;
     }
-    if (isNaN(total_pages) || total_pages <= 0){
+    if (isNaN(total_pages) || total_pages <= 0) {
       setError("عدد المجلدات خطأ");
       setLoading(false);
       return false;
     }
-    
-    
-    
   };
 
   const handleSave = async () => {
-    const validation = validateData()
+    const validation = validateData();
     if (validation === false) return;
     setLoading(true);
     const formData = new FormData();
@@ -73,14 +70,14 @@ function AddBook({ isOpen, setIsOpen, books, setBooks,displayedBooks }) {
     formData.append("category", category);
     formData.append("total_pages", total_pages);
     if (image) formData.append("file", image);
-    const newBook = await booksManager.addBookManually(formData,userId);
+    const newBook = await booksManager.addBookManually(formData, userId);
     if (newBook.error) {
       setError(newBook.error);
       setLoading(false);
       return;
     }
-    setBooks(prevBooks => [...prevBooks, newBook]);
-    displayedBooks(books)
+    setBooks((prevBooks) => [...prevBooks, newBook]);
+    displayedBooks(books);
     setLoading(false);
     setIsOpen(false);
   };
@@ -159,11 +156,21 @@ function AddBook({ isOpen, setIsOpen, books, setBooks,displayedBooks }) {
                   src={preview}
                   alt="Book preview"
                 ></img>
-                <FontAwesomeIcon className="absolute cursor-pointer top-0   right-0 text-amber-50 p-1 rounded" onClick={()=>{setPreview("")}} icon={faX}></FontAwesomeIcon>
+                <FontAwesomeIcon
+                  className="absolute cursor-pointer top-0   right-0 text-amber-50 p-1 rounded"
+                  onClick={() => {
+                    setPreview("");
+                  }}
+                  icon={faX}
+                ></FontAwesomeIcon>
               </div>
             ) : (
-              <div  className={`${error && 'bg-red-500 text-white underline'}`}>
-                <label htmlFor="book_image" style={{"cursor":"Pointer"}} className={`${labelStyle} ${error && 'text-white'}`}>
+              <div className={`${error && "bg-red-500 text-white underline"}`}>
+                <label
+                  htmlFor="book_image"
+                  style={{ cursor: "Pointer" }}
+                  className={`${labelStyle} ${error && "text-white"}`}
+                >
                   {" "}
                   ارفق صورة الكتاب
                 </label>
@@ -173,7 +180,6 @@ function AddBook({ isOpen, setIsOpen, books, setBooks,displayedBooks }) {
                   name="book_image"
                   className="hidden"
                   onChange={handleImageChange}
-                  
                 />
               </div>
             )}

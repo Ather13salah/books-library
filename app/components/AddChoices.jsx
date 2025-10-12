@@ -2,7 +2,7 @@ import AddBookImg from "./AddBookImg";
 function AddChoices({ handleChange, setOpen }) {
   return (
     <div>
-      <details className=" fixed top-2 right-2 p-4 shadow-md ">
+      <details className=" fixed top-2 right-2 p-4 bg-gray-100 shadow-md ">
         <summary className="cursor-pointer text-purple-600 text-center mt-3.5 w-36  rounded-lg ">
           Add New
         </summary>

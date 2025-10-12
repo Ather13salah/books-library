@@ -14,7 +14,7 @@ import {
   faPen,
   faStar,
   faX,
-  faImage
+  faImage,
 } from "@fortawesome/free-solid-svg-icons";
 function BookInfo({
   book,
@@ -89,18 +89,22 @@ function BookInfo({
     isOpenToEdit,
     setIsOpenToEdit,
   };
-  console.log(book);
   return (
     <AlertDialog open={isOpen}>
-      <AlertDialogContent className="min-w-lg">
-        <AlertDialogTitle>Book Information</AlertDialogTitle>
+      <AlertDialogContent className=" w-[100vw] max-h-[80vh] overflow-x-auto">
+        <AlertDialogTitle>
+        
+          <div className="flex justify-between relative w-full">
+            <div>  Book Information</div>
+            <FontAwesomeIcon
+              icon={faX}
+              onClick={() => setIsOpen(false)}
+              className="absolute top-0 right-0 cursor-pointer"
+            ></FontAwesomeIcon>
+          </div>
+        </AlertDialogTitle>
 
-        <div className="w-full h-full flex-col flex pt-1.5 justify-center items-start rounded-t-xl ">
-          <FontAwesomeIcon
-            icon={faX}
-            onClick={() => setIsOpen(false)}
-            className="fixed top-4 right-4 cursor-pointer"
-          ></FontAwesomeIcon>
+        <div className="w-full   h-full flex-col flex pt-1.5 justify-center items-start rounded-t-xl ">
           <div className="flex flex-col justify-center">
             <div className="w-full flex justify-between ">
               <div className="">
