@@ -163,7 +163,7 @@ function Edit({
               className={inputStyle}
             />
 
-            <label className={labelStyle}>عدد الصفحات:</label>
+            <label className={labelStyle}>عدد المجلدات:</label>
             <input
               dir="rtl"
               type="text"
@@ -188,7 +188,7 @@ function Edit({
                   icon={faX}
                 ></FontAwesomeIcon>
               </div>
-            ) :!book.image_url && (
+            ) : (
               <div className={`${error && "bg-red-500 text-white underline"}`}>
                 <label
                   htmlFor="book_image"
